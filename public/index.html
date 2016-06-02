@@ -14,7 +14,7 @@
       <form id="addAcomment">
         <textarea  rows="20" cols="30" placeholder="Make A Comment" align="left" id="comment"></textarea>
       <br />
-      <button type="submit" onclick="addComment(event)">Add Comment</button>
+      <button type="submit" id="add" onclick="addComment(event)">Add Comment</button>
       <br/>
     </form>
 
@@ -42,23 +42,24 @@
   </div>
 
   <!-- jQuery Scripts -->
-  <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+  <script src= "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
-  <!-- App.js handles the on-click events and AJAX calls to our API -->
   <script src="app.js"></script>
   <script>
 
-function addComment(event){
-    var targ= event.target || event.srcElement;
-    document.getElementById('comment').value += targ.textContent || targ.innerText;
-}
 
 function ClearFields(){
 
   document.getelementById('delete').value="";
 }  
 
+function addComment(event){
+  document.getelementById('comment').value="";
+}
 
+$('#add').click(function(){
+  $('#deleteAcomment').append($('#comment').text());
+})
 
     
   </script>
