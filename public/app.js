@@ -1,12 +1,12 @@
 $.getJSON('/read', function(data) {
   for (var i = 0; i<data.length; i++){
-    $('#articles').append('<p data-id="' + data[i]._id + '">'+ data[i].title + '<br />'+ data[i].link + '</p>');
+    $('#saved').append('<p data-id="' + data[i]._id + '">'+ data[i].title + '<br />'+ data[i].link + '</p>');
   }
 });
 
 
 $(document).on('click', 'p', function(){
-  $('#notes').empty();
+  $('#read').empty();
   var thisId = $(this).attr('data-id');
 
   $.ajax({
@@ -15,10 +15,10 @@ $(document).on('click', 'p', function(){
   })
     .done(function( data ) {
       console.log(data);
-      $('#notes').append('<h2>' + data.title + '</h2>');
-      $('#notes').append('<input id="titleinput" name="title" >');
-      $('#notes').append('<textarea id="bodyinput" name="body"></textarea>');
-      $('#notes').append('<button data-id="' + data._id + '" id="savenote">Save Note</button>');
+      $('#read').append('<h2>' + data.title + '</h2>');
+      $('#read').append('<input id="titleinput" name="title" >');
+      $('#read').append('<textarea id="bodyinput" name="body"></textarea>');
+      $('#read').append('<button data-id="' + data._id + '" id="savenote">Save Note</button>');
 
       if(data.note){
         $('#titleinput').val(data.note.title);

@@ -2,102 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Document</title>
-  <style>
-    body{
-      background-color: #F2F6D0
-    }
-    #wrapper{
-      width:960px;
-      margin: 0 auto;
-      padding-top: 5%;
-    }
-    #articles{
-      width:60%;
-      height:700px;
-      display:inline-block;
-      overflow: auto;
-    }
-    #notes{
-      width:30%;
-      float:right;
-    }
-    textarea, input{
-      display:block;
-      width:100%;
-      background-color: #FCF5C7;
-    }
-    input{
-      height:36px;
-      font-size: 24px;
-    }
-    textarea{
-      height:200px;
-      font-size: 18px;
-    }
-  </style>
+  <title>News Organizer!</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="wrapper">
-    <h1>News Scraper!!</h1>
+    <h1>News Organizer!</h1>
+</div>
+    
+   
+      <form id="addAcomment">
+        <textarea  rows="20" cols="30" placeholder="Make A Comment" align="left" id="comment"></textarea>
+      <br />
+      <button type="submit" onclick="addComment(event)">Add Comment</button>
+      <br/>
+    </form>
+
+      <form id="deleteAcomment" align="right" style="bottom-margin:500px;">
+      <textarea  id="delete"rows="20" cols="30" placeholder="Comment"></textarea>  
+      <br/>
+    <button type="buttom" onclick="ClearFields();">Delete Comment</button>
+      <br/>
+      </form>
+       
+    
   
-    <div id="saved"></div>
-    <div id="read"></div>
+
+    <!-- Results -->
+    <div id="results">
+      <table id="saved">
+ 
+      </table>
+      <br>
+      <table id="read">
+ 
+            
+      </table>
+    </div>
   </div>
-  <script src="https://code.jquery.com/jquery.js">
 
-    $.getJSON('/read', function(data) {
-  for (var i = 0; i<data.length; i++){
-    $('#saved').append('<p data-id="' + data[i]._id + '">'+ data[i].title + '<br />'+ data[i].link + '</p>');
-  }
-});
+  <!-- jQuery Scripts -->
+  <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
 
+  <!-- App.js handles the on-click events and AJAX calls to our API -->
+  <script src="app.js"></script>
+  <script>
 
-$(document).on('click', 'p', function(){
-  $('#read').empty();
-  var thisId = $(this).attr('data-id');
+function addComment(event){
+    var targ= event.target || event.srcElement;
+    document.getElementById('comment').value += targ.textContent || targ.innerText;
+}
 
-  $.ajax({
-    method: "GET",
-    url: "/saved/" + thisId,
-  })
-    .done(function( data ) {
-      console.log(data);
-      $('#read').append('<h2>' + data.title + '</h2>');
-      $('#read').append('<input id="titleinput" name="title" >');
-      $('#read').append('<textarea id="bodyinput" name="body"></textarea>');
-      $('#read').append('<button data-id="' + data._id + '" id="savenote">Save Note</button>');
+function ClearFields(){
 
-      if(data.note){
-        $('#titleinput').val(data.note.title);
-        $('#bodyinput').val(data.note.body);
-      }
-    });
-});
-
-$(document).on('click', '#savenote', function(){
-  var thisId = $(this).attr('data-id');
-
-  $.ajax({
-    method: "POST",
-    url: "/read/" + thisId,
-    data: {
-      title: $('#titleinput').val(),
-      body: $('#bodyinput').val()
-    }
-  })
-    .done(function( data ) {
-      console.log(data);
-      $('#saved').empty();
-    });
-
-
-  $('#titleinput').val("");
-  $('#bodyinput').val("");
-});
+  document.getelementById('delete').value="";
+}  
 
 
 
+    
   </script>
+  
 </body>
 </html>
