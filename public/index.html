@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    body{
+      background-color: #F2F6D0
+    }
+    #wrapper{
+      width:960px;
+      margin: 0 auto;
+      padding-top: 5%;
+    }
+    #articles{
+      width:60%;
+      height:700px;
+      display:inline-block;
+      overflow: auto;
+    }
+    #notes{
+      width:30%;
+      float:right;
+    }
+    textarea, input{
+      display:block;
+      width:100%;
+      background-color: #FCF5C7;
+    }
+    input{
+      height:36px;
+      font-size: 24px;
+    }
+    textarea{
+      height:200px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div id="wrapper">
+    <h1>News Scraper!!</h1>
+  
+    <div id="saved"></div>
+    <div id="read"></div>
+  </div>
+  <script src="https://code.jquery.com/jquery.js">
+
+    $.getJSON('/read', function(data) {
+  for (var i = 0; i<data.length; i++){
+    $('#saved').append('<p data-id="' + data[i]._id + '">'+ data[i].title + '<br />'+ data[i].link + '</p>');
+  }
+});
+
+
+$(document).on('click', 'p', function(){
+  $('#read').empty();
+  var thisId = $(this).attr('data-id');
+
+  $.ajax({
+    method: "GET",
+    url: "/saved/" + thisId,
+  })
+    .done(function( data ) {
+      console.log(data);
+      $('#read').append('<h2>' + data.title + '</h2>');
+      $('#read').append('<input id="titleinput" name="title" >');
+      $('#read').append('<textarea id="bodyinput" name="body"></textarea>');
+      $('#read').append('<button data-id="' + data._id + '" id="savenote">Save Note</button>');
+
+      if(data.note){
+        $('#titleinput').val(data.note.title);
+        $('#bodyinput').val(data.note.body);
+      }
+    });
+});
+
+$(document).on('click', '#savenote', function(){
+  var thisId = $(this).attr('data-id');
+
+  $.ajax({
+    method: "POST",
+    url: "/read/" + thisId,
+    data: {
+      title: $('#titleinput').val(),
+      body: $('#bodyinput').val()
+    }
+  })
+    .done(function( data ) {
+      console.log(data);
+      $('#saved').empty();
+    });
+
+
+  $('#titleinput').val("");
+  $('#bodyinput').val("");
+});
+
+
+
+  </script>
+</body>
+</html>
